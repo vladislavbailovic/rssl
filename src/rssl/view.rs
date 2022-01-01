@@ -22,17 +22,21 @@ impl Selection {
         Selection{ model }
     }
 
-    pub fn output<'a>(&self) -> Paragraph<'a> {
+    pub fn output(&self) -> Paragraph {
         let name = self.model.name.as_str().to_string();
+        Paragraph::new(self.get_styled_content())
+            .block(get_block().title(name))
+            // .scroll((state.source.get_pos() as u16, 0))
+            .wrap(Wrap { trim: false })
+    }
+
+    pub fn get_styled_content(&self) -> Vec<Spans> {
         let mut styled = Vec::new();
         for (idx, line) in self.model.items.iter().enumerate() {
             let mut style = Style::default();
             let line = line.as_str().to_string();
             styled.push(Spans::from(vec![Span::styled(line, style)]));
         }
-        Paragraph::new(styled)
-            .block(get_block().title(name))
-            // .scroll((state.source.get_pos() as u16, 0))
-            .wrap(Wrap { trim: false })
+        styled
     }
 }
