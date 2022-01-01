@@ -1,10 +1,15 @@
-use std::{io,process};
 use crossterm::{
+    event::{self, Event},
     execute,
-    event::{self,Event},
     terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
 };
-use tui::{backend::{CrosstermBackend,Backend}, Terminal, Frame};
+use std::{io, process};
+use tui::{
+    backend::{Backend, CrosstermBackend},
+    Frame, Terminal,
+};
+
+pub mod rssl;
 
 fn main() {
     let terminal = bootstrap();
@@ -13,12 +18,12 @@ fn main() {
 
 fn exit(status: i32) {
     disable_raw_mode().expect("Could not disable raw mode");
-    execute!(io::stdout(), LeaveAlternateScreen)
-        .expect("Unable to leave alternate screen");
+    execute!(io::stdout(), LeaveAlternateScreen).expect("Unable to leave alternate screen");
     process::exit(status)
 }
 
 pub fn draw<B: Backend>(frame: &mut Frame<B>) {
+    rssl::draw(frame);
 }
 
 fn exec<B: Backend>(mut terminal: Terminal<B>) {
@@ -26,10 +31,8 @@ fn exec<B: Backend>(mut terminal: Terminal<B>) {
         terminal
             .draw(|frame| draw(frame))
             .expect("Could not draw UI");
-        if let Ok(Event::Key(key)) = event::read() {
-            match key {
-                _ => return exit(161),
-            };
+        if rssl::handle() {
+            exit(161);
         }
     }
 }
