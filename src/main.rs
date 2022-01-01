@@ -1,5 +1,4 @@
 use crossterm::{
-    event::{self, Event},
     execute,
     terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
 };
@@ -32,16 +31,17 @@ fn exec<B: Backend>(mut terminal: Terminal<B>) {
             .draw(|frame| draw(frame))
             .expect("Could not draw UI");
         if rssl::handle() {
-            exit(161);
+            break;
         }
     }
+    exit(0);
 }
 
 fn bootstrap() -> Terminal<impl Backend> {
     execute!(io::stdout(), EnterAlternateScreen).expect("Unable to enter alternate screen");
     let stdout = io::stdout();
     let backend = CrosstermBackend::new(stdout);
-    let mut terminal = Terminal::new(backend).expect("Unable to bootstrap terminal");
+    let terminal = Terminal::new(backend).expect("Unable to bootstrap terminal");
 
     enable_raw_mode().expect("Could not enable raw mode");
     terminal
