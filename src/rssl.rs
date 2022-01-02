@@ -14,10 +14,8 @@ pub struct Rssl {
 }
 impl Rssl {
     pub fn new() -> Self {
-        let list = model::List::new(
-            "A List",
-            vec![ "test".to_string(), "2nd line".to_string() ]
-        );
+        let source = model::Source::Static("lines\nin\na\nmulti item\nlist".to_string());
+        let list = source.load("static list");
         let sel = view::Selection::new();
         Self{ list, selection: sel }
     }

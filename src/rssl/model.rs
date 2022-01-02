@@ -45,11 +45,27 @@ pub struct List {
 }
 impl List {
     pub fn new(name: &str, items: Vec<String>) -> List {
-        let len = items.len();
+        let len = items.len() - 1;
         List {
             name: name.to_string(),
             items: Items { items },
             pos: Cursor{ current: 0, max: len }
+        }
+    }
+}
+
+pub enum Source {
+    Static(String),
+    Filelist(String),
+}
+impl Source {
+    pub fn load(&self, title: &str) -> List {
+        match self {
+            Source::Static(content) => {
+                let items: Vec<String> = content.split('\n').map(String::from).collect();
+                List::new(title, items)
+            }
+            _ => List::new(title, vec![ "files".to_string() ]),
         }
     }
 }
