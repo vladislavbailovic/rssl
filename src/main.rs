@@ -21,16 +21,13 @@ fn exit(status: i32) {
     process::exit(status)
 }
 
-pub fn draw<B: Backend>(frame: &mut Frame<B>) {
-    rssl::draw(frame);
-}
-
 fn exec<B: Backend>(mut terminal: Terminal<B>) {
+    let mut r = rssl::Rssl::new();
     loop {
         terminal
-            .draw(|frame| draw(frame))
+            .draw(|frame| r.draw(frame))
             .expect("Could not draw UI");
-        if rssl::handle() {
+        if r.handle() {
             break;
         }
     }
