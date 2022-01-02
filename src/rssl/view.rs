@@ -71,7 +71,7 @@ impl Selection {
 
     fn get_styled_content(&self, model: &model::List) -> Vec<Spans> {
         let mut styled = Vec::new();
-        for (idx, line) in model.items.iter().enumerate() {
+        for (idx, line) in model.items().iter().enumerate() {
             let mut style = Style::default();
             if idx == model.pos.get() {
                 style = style.bg(COLOR_FG).fg(COLOR_BG);

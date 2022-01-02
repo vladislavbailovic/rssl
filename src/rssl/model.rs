@@ -43,8 +43,9 @@ impl Items {
 
 pub struct List {
     pub name: String,
-    pub items: Items,
     pub pos: Cursor,
+
+    items: Items,
 }
 impl List {
     pub fn new(name: &str, items: Vec<String>) -> List {
@@ -54,6 +55,10 @@ impl List {
             items: Items { items },
             pos: Cursor{ current: 0, max: len }
         }
+    }
+
+    pub fn items(&self) -> &Items {
+        &self.items
     }
 }
 
