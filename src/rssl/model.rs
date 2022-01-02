@@ -6,8 +6,11 @@ impl Cursor {
     pub fn get(&self) -> usize {
         self.current
     }
+    pub fn max(&self) -> usize {
+        self.max
+    }
     pub fn set(&mut self, pos: usize) -> bool {
-        if pos > 0 && pos < self.max {
+        if pos >= 0 && pos < self.max {
             self.current = pos;
             return true;
         }
