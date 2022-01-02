@@ -1,8 +1,8 @@
 use crossterm::event::{self, Event, KeyEvent, KeyCode, KeyModifiers};
 use tui::{
-    backend::Backend,
-    layout::{Constraint, Direction, Layout},
-    Frame,
+    layout::{Constraint, Direction, Layout, Rect},
+    buffer::Buffer,
+    widgets::Widget,
 };
 
 mod model;
@@ -22,16 +22,6 @@ impl Rssl {
         Self{ list, selection: sel }
     }
 
-    pub fn draw<B: Backend>(&self, frame: &mut Frame<B>) {
-        let frame_size = frame.size();
-        let parts = Layout::default()
-            .direction(Direction::Vertical)
-            .constraints([Constraint::Min(2), Constraint::Length(2)].as_ref())
-            .split(frame_size);
-
-        frame.render_widget(self.selection.output(&self.list), parts[0]);
-    }
-
     pub fn handle(&mut self) -> bool {
         if let Ok(Event::Key(key)) = event::read() {
             match key {
@@ -44,4 +34,16 @@ impl Rssl {
         }
         false
     }
+}
+
+impl Widget for &Rssl {
+
+    fn render(self, area: Rect, buf: &mut Buffer) {
+        let parts = Layout::default()
+            .direction(Direction::Vertical)
+            .constraints([Constraint::Min(2), Constraint::Length(2)].as_ref())
+            .split(area);
+        self.selection.output(&self.list).render(parts[0], buf);
+    }
+
 }

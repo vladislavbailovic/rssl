@@ -1,4 +1,4 @@
-use crossterm::event::{Event, KeyEvent, KeyCode};
+use crossterm::event::{KeyEvent, KeyCode};
 use tui::{
     style::{Color, Style},
     text::{Span, Spans},
@@ -19,7 +19,7 @@ pub struct Selection {
 }
 impl Selection {
     pub fn new() -> Selection {
-        Selection{}
+        Selection{ }
     }
 
     pub fn output(&self, model: &model::List) -> Paragraph {
