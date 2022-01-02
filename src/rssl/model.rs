@@ -57,6 +57,7 @@ impl List {
 pub enum Source {
     Static(String),
     Filelist(String),
+    Command(String),
 }
 impl Source {
     pub fn load(&self, title: &str) -> List {
@@ -64,8 +65,29 @@ impl Source {
             Source::Static(content) => {
                 let items: Vec<String> = content.split('\n').map(String::from).collect();
                 List::new(title, items)
-            }
-            _ => List::new(title, vec![ "files".to_string() ]),
+            },
+            Source::Filelist(path) => {
+                let cmd = Source::Command(path.to_string());
+                cmd.load(title)
+            },
+            Source::Command(cmd) => {
+                let res = filelist(cmd);
+                let stat = Source::Static(res);
+                stat.load(title)
+            },
         }
     }
+}
+
+use std::process::Command;
+fn filelist(command: &str) -> String {
+    let command = Command::new("find")
+        .arg(command)
+        .output()
+        .expect("Command execution failed");
+    let result = String::from_utf8(command.stdout).expect("Invalid stdout");
+    if result.is_empty() {
+        return String::from_utf8(command.stderr).expect("Invalid stderr");
+    }
+    result
 }
