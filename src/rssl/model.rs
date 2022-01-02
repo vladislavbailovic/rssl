@@ -10,7 +10,7 @@ impl Cursor {
         self.max
     }
     pub fn set(&mut self, pos: usize) -> bool {
-        if pos >= 0 && pos < self.max {
+        if pos < self.max {
             self.current = pos;
             return true;
         }
@@ -28,7 +28,7 @@ impl Cursor {
             self.current += 1;
             return true;
         }
-        return false;
+        false
     }
 }
 
@@ -53,7 +53,10 @@ impl List {
         List {
             name: name.to_string(),
             items: Items { items },
-            pos: Cursor{ current: 0, max: len }
+            pos: Cursor {
+                current: 0,
+                max: len,
+            },
         }
     }
 
@@ -73,16 +76,16 @@ impl Source {
             Source::Static(content) => {
                 let items: Vec<String> = content.split('\n').map(String::from).collect();
                 List::new(title, items)
-            },
+            }
             Source::Filelist(path) => {
                 let cmd = Source::Command(path.to_string());
                 cmd.load(title)
-            },
+            }
             Source::Command(cmd) => {
                 let res = filelist(cmd);
                 let stat = Source::Static(res);
                 stat.load(title)
-            },
+            }
         }
     }
 }

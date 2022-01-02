@@ -1,7 +1,7 @@
-use crossterm::event::{self, Event, KeyEvent, KeyCode, KeyModifiers};
+use crossterm::event::{self, Event, KeyCode, KeyEvent, KeyModifiers};
 use tui::{
-    layout::{Constraint, Direction, Layout, Rect},
     buffer::Buffer,
+    layout::{Constraint, Direction, Layout, Rect},
     widgets::Widget,
 };
 
@@ -12,21 +12,31 @@ pub struct Rssl {
     list: model::List,
     selection: view::Selection,
 }
+
+impl Default for Rssl {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl Rssl {
     pub fn new() -> Self {
         // let source = model::Source::Static("lines\nin\na\nmulti item\nlist".to_string());
         let source = model::Source::Filelist(".".to_string());
         let list = source.load("static list");
         let sel = view::Selection::new();
-        Self{ list, selection: sel }
+        Self {
+            list,
+            selection: sel,
+        }
     }
 
     pub fn handle(&mut self) -> bool {
         if let Ok(Event::Key(key)) = event::read() {
             match key {
-                KeyEvent{
+                KeyEvent {
                     code: KeyCode::Char('q'),
-                    modifiers: KeyModifiers::CONTROL
+                    modifiers: KeyModifiers::CONTROL,
                 } => return true,
                 _ => return self.selection.handle(key, &mut self.list),
             };
@@ -36,7 +46,6 @@ impl Rssl {
 }
 
 impl Widget for &Rssl {
-
     fn render(self, area: Rect, buf: &mut Buffer) {
         let parts = Layout::default()
             .direction(Direction::Vertical)
@@ -44,5 +53,4 @@ impl Widget for &Rssl {
             .split(area);
         self.selection.output(&self.list).render(parts[0], buf);
     }
-
 }

@@ -1,10 +1,10 @@
-use crossterm::event::{KeyEvent, KeyCode};
+use super::model;
+use crossterm::event::{KeyCode, KeyEvent};
 use tui::{
     style::{Color, Style},
     text::{Span, Spans},
     widgets::{Block, Borders, Paragraph, Wrap},
 };
-use super::model;
 
 const COLOR_BG: Color = Color::Black;
 const COLOR_FG: Color = Color::Gray;
@@ -15,11 +15,10 @@ fn get_block<'a>() -> Block<'a> {
         .style(Style::default().fg(COLOR_FG).bg(COLOR_BG))
 }
 
-pub struct Selection {
-}
+pub struct Selection {}
 impl Selection {
     pub fn new() -> Selection {
-        Selection{ }
+        Selection {}
     }
 
     pub fn output(&self, model: &model::List) -> Paragraph {
@@ -32,38 +31,46 @@ impl Selection {
 
     pub fn handle(&self, key: KeyEvent, model: &mut model::List) -> bool {
         match key {
-            KeyEvent{
+            KeyEvent {
                 code: KeyCode::Up,
-                modifiers: _
-            } => { model.pos.prev(); },
-            KeyEvent{
+                modifiers: _,
+            } => {
+                model.pos.prev();
+            }
+            KeyEvent {
                 code: KeyCode::PageUp,
-                modifiers: _
+                modifiers: _,
             } => {
                 for _ in 0..10 {
                     model.pos.prev();
                 }
-            },
-            KeyEvent{
+            }
+            KeyEvent {
                 code: KeyCode::Home,
-                modifiers: _
-            } => { model.pos.set(0); },
-            KeyEvent{
+                modifiers: _,
+            } => {
+                model.pos.set(0);
+            }
+            KeyEvent {
                 code: KeyCode::Down,
-                modifiers: _
-            } => { model.pos.next(); },
-            KeyEvent{
+                modifiers: _,
+            } => {
+                model.pos.next();
+            }
+            KeyEvent {
                 code: KeyCode::PageDown,
-                modifiers: _
+                modifiers: _,
             } => {
                 for _ in 0..10 {
                     model.pos.next();
                 }
-            },
-            KeyEvent{
+            }
+            KeyEvent {
                 code: KeyCode::End,
-                modifiers: _
-            } => { model.pos.set(model.pos.max() - 1); },
+                modifiers: _,
+            } => {
+                model.pos.set(model.pos.max() - 1);
+            }
             _ => (),
         };
         false
