@@ -34,6 +34,7 @@ impl Cursor {
 
 pub struct Items {
     items: Vec<String>,
+    filter: Filter,
 }
 impl Items {
     pub fn iter(&self) -> std::slice::Iter<String> {
@@ -50,9 +51,10 @@ pub struct List {
 impl List {
     pub fn new(name: &str, items: Vec<String>) -> List {
         let len = items.len() - 1;
+        let filter = Filter{ pattern: String::from("") };
         List {
             name: name.to_string(),
-            items: Items { items },
+            items: Items { items, filter },
             pos: Cursor {
                 current: 0,
                 max: len,
@@ -62,6 +64,26 @@ impl List {
 
     pub fn items(&self) -> &Items {
         &self.items
+    }
+
+    pub fn filter(&self) -> &Filter {
+        &self.items.filter
+    }
+
+    pub fn filter_mut(&mut self) -> &mut Filter {
+        &mut self.items.filter
+    }
+}
+
+pub struct Filter {
+    pattern: String,
+}
+impl Filter {
+    pub fn pattern(&self) -> &str {
+        &self.pattern
+    }
+    pub fn push(&mut self, c: char) {
+        self.pattern.push(c)
     }
 }
 

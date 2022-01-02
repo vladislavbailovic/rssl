@@ -11,6 +11,7 @@ mod view;
 pub struct Rssl {
     list: model::List,
     selection: view::Selection,
+    filter: view::Filter,
 }
 
 impl Default for Rssl {
@@ -25,8 +26,10 @@ impl Rssl {
         let source = model::Source::Filelist(".".to_string());
         let list = source.load("static list");
         let sel = view::Selection::new();
+        let filter = view::Filter::new();
         Self {
             list,
+            filter,
             selection: sel,
         }
     }
@@ -38,7 +41,11 @@ impl Rssl {
                     code: KeyCode::Char('q'),
                     modifiers: KeyModifiers::CONTROL,
                 } => return true,
-                _ => return self.selection.handle(key, &mut self.list),
+                _ => {
+                    self.selection.handle(key, &mut self.list);
+                    self.filter.handle(key, &mut self.list.filter_mut());
+                    false
+                }
             };
         }
         false
@@ -49,8 +56,9 @@ impl Widget for &Rssl {
     fn render(self, area: Rect, buf: &mut Buffer) {
         let parts = Layout::default()
             .direction(Direction::Vertical)
-            .constraints([Constraint::Min(2), Constraint::Length(2)].as_ref())
+            .constraints([Constraint::Min(2), Constraint::Length(3)].as_ref())
             .split(area);
         self.selection.output(&self.list).render(parts[0], buf);
+        self.filter.output(&self.list.filter()).render(parts[1], buf);
     }
 }

@@ -89,3 +89,30 @@ impl Selection {
         styled
     }
 }
+
+pub struct Filter {}
+impl Filter {
+    pub fn new() -> Filter {
+        Filter {}
+    }
+
+    pub fn output(&self, model: &model::Filter) -> Paragraph {
+        Paragraph::new(model.pattern().to_string())
+            .block(get_block().title(" Filter "))
+            .wrap(Wrap { trim: false })
+    }
+
+    pub fn handle(&self, key: KeyEvent, model: &mut model::Filter) -> bool {
+        match key {
+            KeyEvent {
+                code: KeyCode::Char(c),
+                modifiers: _,
+            } => {
+                model.push(c);
+            },
+            _ => ()
+        };
+        false
+    }
+
+}
