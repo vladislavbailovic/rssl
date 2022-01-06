@@ -9,12 +9,6 @@ use tui::{
 const COLOR_BG: Color = Color::Black;
 const COLOR_FG: Color = Color::Gray;
 
-fn get_block<'a>() -> Block<'a> {
-    Block::default()
-        .borders(Borders::ALL)
-        .style(Style::default().fg(COLOR_FG).bg(COLOR_BG))
-}
-
 pub struct Selection {}
 impl Selection {
     pub fn new() -> Selection {
@@ -23,8 +17,11 @@ impl Selection {
 
     pub fn output(&self, model: &model::List) -> Paragraph {
         let name = model.name.as_str().to_string();
+        let block = Block::default()
+            .borders(Borders::ALL)
+            .style(Style::default().fg(COLOR_FG).bg(COLOR_BG));
         Paragraph::new(self.get_styled_content(model))
-            .block(get_block().title(format!(" {} ", name)))
+            .block(block.title(format!(" {} ", name)))
             .scroll((model.pos.get() as u16, 0))
             .wrap(Wrap { trim: false })
     }
@@ -111,8 +108,12 @@ impl Filter {
             editable.push(Span::styled(String::from(c), style));
         }
 
+        let block = Block::default()
+            .borders(Borders::ALL)
+            .style(Style::default().fg(COLOR_FG).bg(COLOR_BG));
+
         Paragraph::new(Spans::from(editable))
-            .block(get_block().title(" Filter "))
+            .block(block.title(" Filter "))
             .wrap(Wrap { trim: false })
     }
 
