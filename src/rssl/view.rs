@@ -124,6 +124,28 @@ impl Filter {
             } => {
                 model.push(c);
             },
+
+            KeyEvent {
+                code: KeyCode::Backspace,
+                modifiers: _,
+            } => {
+                model.backspace();
+            },
+
+            KeyEvent {
+                code: KeyCode::Left,
+                modifiers: _,
+            } => {
+                model.left();
+            },
+
+            KeyEvent {
+                code: KeyCode::Right,
+                modifiers: _,
+            } => {
+                model.right();
+            },
+
             _ => ()
         };
         false
