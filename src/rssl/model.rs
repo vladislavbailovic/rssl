@@ -9,6 +9,10 @@ impl Cursor {
     pub fn max(&self) -> usize {
         self.max
     }
+    pub fn set_max(&mut self, max: usize) {
+        self.max = max;
+    }
+
     pub fn set(&mut self, pos: usize) -> bool {
         if pos < self.max {
             self.current = pos;
@@ -51,10 +55,9 @@ pub struct List {
 impl List {
     pub fn new(name: &str, items: Vec<String>) -> List {
         let len = items.len() - 1;
-        let filter = Filter{ pattern: String::from("") };
         List {
             name: name.to_string(),
-            items: Items { items, filter },
+            items: Items { items, filter: Filter::new() },
             pos: Cursor {
                 current: 0,
                 max: len,
@@ -77,13 +80,35 @@ impl List {
 
 pub struct Filter {
     pattern: String,
+    pos: Cursor
 }
 impl Filter {
+    pub fn new() -> Filter {
+        Filter{ pattern: String::new(), pos: Cursor{current: 0, max: 0} }
+    }
+    pub fn pos(&self) -> usize {
+        self.pos.get()
+    }
     pub fn pattern(&self) -> &str {
         &self.pattern
     }
     pub fn push(&mut self, c: char) {
-        self.pattern.push(c)
+        self.pattern.push(c);
+        self.pos.set_max(self.pattern.len());
+        self.pos.next();
+    }
+    pub fn backspace(&mut self) {
+        if self.pos.get() <= self.pattern.len() {
+            if self.pos.prev() {
+                self.pattern.remove(self.pos.get());
+            }
+        }
+    }
+    pub fn right(&mut self) {
+        self.pos.next();
+    }
+    pub fn left(&mut self) {
+        self.pos.prev();
     }
 }
 
