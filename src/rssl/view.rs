@@ -97,7 +97,21 @@ impl Filter {
     }
 
     pub fn output(&self, model: &model::Filter) -> Paragraph {
-        Paragraph::new(model.pattern().to_string())
+        let mut output = model.pattern().to_string();
+        if model.pos() >= output.len() {
+            output += "<";
+        }
+
+    let mut editable = Vec::new();
+    for (idx, c) in output.chars().enumerate() {
+        let mut style = Style::default();
+        if idx == model.pos() {
+            style = style.bg(COLOR_FG).fg(COLOR_BG);
+        }
+        editable.push(Span::styled(String::from(c), style));
+    }
+
+        Paragraph::new(Spans::from(editable))
             .block(get_block().title(" Filter "))
             .wrap(Wrap { trim: false })
     }
