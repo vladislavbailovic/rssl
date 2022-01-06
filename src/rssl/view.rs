@@ -109,11 +109,10 @@ impl Filter {
         }
 
         let block = Block::default()
-            .borders(Borders::ALL)
             .style(Style::default().fg(COLOR_FG).bg(COLOR_BG));
 
         Paragraph::new(Spans::from(editable))
-            .block(block.title(" Filter "))
+            .block(block)
             .wrap(Wrap { trim: false })
     }
 
