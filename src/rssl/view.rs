@@ -99,17 +99,17 @@ impl Filter {
     pub fn output(&self, model: &model::Filter) -> Paragraph {
         let mut output = model.pattern().to_string();
         if model.pos() >= output.len() {
-            output += "<";
+            output += "_";
         }
 
-    let mut editable = Vec::new();
-    for (idx, c) in output.chars().enumerate() {
-        let mut style = Style::default();
-        if idx == model.pos() {
-            style = style.bg(COLOR_FG).fg(COLOR_BG);
+        let mut editable = Vec::new();
+        for (idx, c) in output.chars().enumerate() {
+            let mut style = Style::default();
+            if idx == model.pos() {
+                style = style.bg(COLOR_FG).fg(COLOR_BG);
+            }
+            editable.push(Span::styled(String::from(c), style));
         }
-        editable.push(Span::styled(String::from(c), style));
-    }
 
         Paragraph::new(Spans::from(editable))
             .block(get_block().title(" Filter "))
@@ -123,32 +123,31 @@ impl Filter {
                 modifiers: _,
             } => {
                 model.push(c);
-            },
+            }
 
             KeyEvent {
                 code: KeyCode::Backspace,
                 modifiers: _,
             } => {
                 model.backspace();
-            },
+            }
 
             KeyEvent {
                 code: KeyCode::Left,
                 modifiers: _,
             } => {
                 model.left();
-            },
+            }
 
             KeyEvent {
                 code: KeyCode::Right,
                 modifiers: _,
             } => {
                 model.right();
-            },
+            }
 
-            _ => ()
+            _ => (),
         };
         false
     }
-
 }

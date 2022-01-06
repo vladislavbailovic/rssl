@@ -57,7 +57,10 @@ impl List {
         let len = items.len() - 1;
         List {
             name: name.to_string(),
-            items: Items { items, filter: Filter::new() },
+            items: Items {
+                items,
+                filter: Filter::new(),
+            },
             pos: Cursor {
                 current: 0,
                 max: len,
@@ -80,11 +83,14 @@ impl List {
 
 pub struct Filter {
     pattern: String,
-    pos: Cursor
+    pos: Cursor,
 }
 impl Filter {
     pub fn new() -> Filter {
-        Filter{ pattern: String::new(), pos: Cursor{current: 0, max: 0} }
+        Filter {
+            pattern: String::new(),
+            pos: Cursor { current: 0, max: 0 },
+        }
     }
     pub fn pos(&self) -> usize {
         self.pos.get()
