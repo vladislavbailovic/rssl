@@ -36,48 +36,52 @@ impl Cursor {
     }
 }
 
-pub struct Items {
-    items: Vec<String>,
-    filter: Filter,
-}
-impl Items {
-    pub fn iter(&self) -> std::slice::Iter<String> {
-        self.items.iter()
-    }
-}
 
 pub struct List {
     pub name: String,
     pub pos: Cursor,
 
-    items: Items,
+    filter: Filter,
+    items: Vec<String>,
+    filtered: Vec<String>,
 }
 impl List {
     pub fn new(name: &str, items: Vec<String>) -> List {
         let len = items.len() - 1;
         List {
             name: name.to_string(),
-            items: Items {
-                items,
-                filter: Filter::new(),
-            },
+            items,
+            filter: Filter::new(),
             pos: Cursor {
                 current: 0,
                 max: len,
             },
+            filtered: Vec::new(),
         }
     }
 
-    pub fn items(&self) -> &Items {
-        &self.items
+    pub fn apply_filter(&mut self) {
+        self.filtered = Vec::new();
+        for item in self.items.iter() {
+            if item.contains(self.filter.pattern()) {
+                self.filtered.push(item.to_string());
+            }
+        }
+    }
+
+    pub fn items(&self) -> &Vec<String> {
+        if self.filter.pattern().len() > 0 {
+            return &self.filtered;
+        }
+        return &self.items;
     }
 
     pub fn filter(&self) -> &Filter {
-        &self.items.filter
+        &self.filter
     }
 
     pub fn filter_mut(&mut self) -> &mut Filter {
-        &mut self.items.filter
+        &mut self.filter
     }
 }
 

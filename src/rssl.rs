@@ -42,8 +42,9 @@ impl Rssl {
                     modifiers: KeyModifiers::CONTROL,
                 } => return true,
                 _ => {
-                    self.selection.handle(key, &mut self.list);
                     self.filter.handle(key, &mut self.list.filter_mut());
+                    self.list.apply_filter();
+                    self.selection.handle(key, &mut self.list);
                     false
                 }
             };

@@ -68,7 +68,7 @@ impl Selection {
             } => {
                 model.pos.set(model.pos.max() - 1);
             }
-            _ => (),
+            _ => {},
         };
         false
     }
