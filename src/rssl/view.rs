@@ -1,6 +1,7 @@
 use super::model;
 use crossterm::event::{KeyCode, KeyEvent};
 use tui::{
+    layout::Rect,
     style::{Color, Style},
     text::{Span, Spans},
     widgets::{Block, Borders, Paragraph, Wrap},
@@ -15,14 +16,20 @@ impl Selection {
         Selection {}
     }
 
-    pub fn output(&self, model: &model::List) -> Paragraph {
+    pub fn output(&self, model: &model::List, size: &Rect) -> Paragraph {
         let name = model.name.as_str().to_string();
         let block = Block::default()
             .borders(Borders::ALL)
             .style(Style::default().fg(COLOR_FG).bg(COLOR_BG));
+        let mut y = model.pos.get() as u16;
+        if y < size.height - 3{
+            y = 0;
+        } else {
+            y -= size.height - 3;
+        }
         Paragraph::new(self.get_styled_content(model))
             .block(block.title(format!(" {} ", name)))
-            .scroll((model.pos.get() as u16, 0))
+            .scroll((y as u16, 0))
             .wrap(Wrap { trim: false })
     }
 

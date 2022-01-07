@@ -59,7 +59,7 @@ impl Widget for &Rssl {
             .direction(Direction::Vertical)
             .constraints([Constraint::Min(2), Constraint::Length(1)].as_ref())
             .split(area);
-        self.selection.output(&self.list).render(parts[0], buf);
+        self.selection.output(&self.list, &parts[0]).render(parts[0], buf);
         self.filter
             .output(&self.list.filter())
             .render(parts[1], buf);

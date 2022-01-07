@@ -67,6 +67,10 @@ impl List {
                 self.filtered.push(item.to_string());
             }
         }
+        if self.pos.get() >= self.filtered.len() - 1 {
+            self.pos.set(self.filtered.len() - 1);
+        }
+        self.pos.set_max(self.filtered.len() - 1);
     }
 
     pub fn items(&self) -> &Vec<String> {
