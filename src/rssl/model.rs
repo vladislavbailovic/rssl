@@ -36,7 +36,6 @@ impl Cursor {
     }
 }
 
-
 pub struct List {
     pub name: String,
     pub pos: Cursor,
@@ -67,17 +66,22 @@ impl List {
                 self.filtered.push(item.to_string());
             }
         }
-        if self.pos.get() >= self.filtered.len() - 1 {
-            self.pos.set(self.filtered.len() - 1);
+        if !self.filtered.is_empty() {
+            if self.pos.get() >= self.filtered.len() - 1 {
+                self.pos.set(self.filtered.len() - 1);
+            }
+            self.pos.set_max(self.filtered.len() - 1);
+        } else {
+            self.pos.set(0);
+            self.pos.set_max(0);
         }
-        self.pos.set_max(self.filtered.len() - 1);
     }
 
     pub fn items(&self) -> &Vec<String> {
-        if self.filter.pattern().len() > 0 {
+        if !self.filter.pattern().is_empty() {
             return &self.filtered;
         }
-        return &self.items;
+        &self.items
     }
 
     pub fn filter(&self) -> &Filter {
@@ -112,10 +116,8 @@ impl Filter {
         self.pos.next();
     }
     pub fn backspace(&mut self) {
-        if self.pos.get() <= self.pattern.len() {
-            if self.pos.prev() {
-                self.pattern.remove(self.pos.get());
-            }
+        if self.pos.get() <= self.pattern.len() && self.pos.prev() {
+            self.pattern.remove(self.pos.get());
         }
     }
     pub fn right(&mut self) {

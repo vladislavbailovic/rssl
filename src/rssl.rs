@@ -42,7 +42,7 @@ impl Rssl {
                     modifiers: KeyModifiers::CONTROL,
                 } => return true,
                 _ => {
-                    self.filter.handle(key, &mut self.list.filter_mut());
+                    self.filter.handle(key, self.list.filter_mut());
                     self.list.apply_filter();
                     self.selection.handle(key, &mut self.list);
                     false
@@ -59,9 +59,9 @@ impl Widget for &Rssl {
             .direction(Direction::Vertical)
             .constraints([Constraint::Min(2), Constraint::Length(1)].as_ref())
             .split(area);
-        self.selection.output(&self.list, &parts[0]).render(parts[0], buf);
-        self.filter
-            .output(&self.list.filter())
-            .render(parts[1], buf);
+        self.selection
+            .output(&self.list, &parts[0])
+            .render(parts[0], buf);
+        self.filter.output(self.list.filter()).render(parts[1], buf);
     }
 }

@@ -22,7 +22,7 @@ impl Selection {
             .borders(Borders::ALL)
             .style(Style::default().fg(COLOR_FG).bg(COLOR_BG));
         let mut y = model.pos.get() as u16;
-        if y < size.height - 3{
+        if y < size.height - 3 {
             y = 0;
         } else {
             y -= size.height - 3;
@@ -75,7 +75,7 @@ impl Selection {
             } => {
                 model.pos.set(model.pos.max() - 1);
             }
-            _ => {},
+            _ => {}
         };
         false
     }
@@ -115,8 +115,7 @@ impl Filter {
             editable.push(Span::styled(String::from(c), style));
         }
 
-        let block = Block::default()
-            .style(Style::default().fg(COLOR_FG).bg(COLOR_BG));
+        let block = Block::default().style(Style::default().fg(COLOR_FG).bg(COLOR_BG));
 
         Paragraph::new(Spans::from(editable))
             .block(block)
