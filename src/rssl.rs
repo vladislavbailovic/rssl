@@ -76,7 +76,9 @@ impl Rssl {
         }
     }
 
-    fn handle_selection(&mut self, _key: KeyEvent) {
-        todo!("Selection event handling");
+    fn handle_selection(&mut self, key: KeyEvent) {
+        if let actions::Message::Item(what) = actions::catalog::handle(key, &mut self.selected) {
+            self.selected.remove(what);
+        }
     }
 }

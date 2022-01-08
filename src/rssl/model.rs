@@ -42,6 +42,9 @@ pub trait Listlike {
     fn pos_mut(&mut self) -> &mut Cursor;
     fn items(&self) -> &Vec<String>;
     fn current(&self) -> String {
+        if self.items().is_empty() {
+            return "".to_string();
+        }
         self.items()[self.pos().get()].as_str().to_string()
     }
 }
@@ -141,7 +144,23 @@ impl List {
 
 impl List {
     pub fn push(&mut self, item: String) {
-        self.items.push(item)
+        self.items.push(item);
+        if !self.items.is_empty() {
+            self.pos.set_max(self.items.len() - 1);
+        }
+    }
+
+    pub fn remove(&mut self, what: String) {
+        for (idx, item) in self.items.iter().enumerate() {
+            if item != &what {
+                continue;
+            }
+            self.items.remove(idx);
+            if !self.items.is_empty() {
+                self.pos.set_max(self.items.len() - 1);
+            }
+            break;
+        }
     }
 }
 
