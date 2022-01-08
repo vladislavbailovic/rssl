@@ -41,6 +41,8 @@ impl Rssl {
                     code: KeyCode::Char('q'),
                     modifiers: KeyModifiers::CONTROL,
                 } => return true,
+                // TODO: <ctrl+space> to (un)select an item
+                // TODO: <Tab> to toggle between source/filter and selection/action pages
                 _ => {
                     self.filter.handle(key, self.list.filter_mut());
                     self.list.apply_filter();

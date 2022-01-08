@@ -35,6 +35,10 @@ fn exec<B: Backend>(mut terminal: Terminal<B>) {
             break;
         }
     }
+    terminal.clear().expect("Unable to clear the terminal");
+    terminal
+        .show_cursor()
+        .expect("Unable to re-show the cursor");
     exit(0);
 }
 
