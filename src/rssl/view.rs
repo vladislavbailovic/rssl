@@ -40,7 +40,7 @@ impl Selection {
                 modifiers: _,
             } => {
                 model.pos.prev();
-            },
+            }
 
             KeyEvent {
                 code: KeyCode::PageUp,
@@ -49,21 +49,21 @@ impl Selection {
                 for _ in 0..10 {
                     model.pos.prev();
                 }
-            },
+            }
 
             KeyEvent {
                 code: KeyCode::Home,
                 modifiers: _,
             } => {
                 model.pos.set(0);
-            },
+            }
 
             KeyEvent {
                 code: KeyCode::Down,
                 modifiers: _,
             } => {
                 model.pos.next();
-            },
+            }
 
             KeyEvent {
                 code: KeyCode::PageDown,
@@ -72,14 +72,14 @@ impl Selection {
                 for _ in 0..10 {
                     model.pos.next();
                 }
-            },
+            }
 
             KeyEvent {
                 code: KeyCode::End,
                 modifiers: _,
             } => {
                 model.pos.set(model.pos.max() - 1);
-            },
+            }
 
             KeyEvent {
                 code: KeyCode::Char(' '),

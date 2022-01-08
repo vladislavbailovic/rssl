@@ -45,14 +45,12 @@ impl Rssl {
                 } => return true,
                 // TODO: <Tab> to toggle between source/filter and selection/action pages
                 _ => {
-                    match self.filter.handle(key, self.list.filter_mut()) {
-                        model::Comm::Filter => self.list.apply_filter(),
-                        _ => (),
-                    };
-                    match self.selection.handle(key, &mut self.list) {
-                        model::Comm::Item(what) => self.selected.push(what),
-                        _ => (),
-                    };
+                    if let model::Comm::Filter = self.filter.handle(key, self.list.filter_mut()) {
+                        self.list.apply_filter();
+                    }
+                    if let model::Comm::Item(what) = self.selection.handle(key, &mut self.list) {
+                        self.selected.push(what);
+                    }
                     false
                 }
             };
