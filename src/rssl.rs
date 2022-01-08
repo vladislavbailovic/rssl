@@ -5,14 +5,12 @@ use tui::{
     widgets::Widget,
 };
 
+mod actions;
 mod model;
 mod view;
 
 pub struct Rssl {
     list: model::List,
-    selection: view::Selection,
-    filter: view::Filter,
-
     pub selected: Vec<String>,
 }
 
@@ -26,12 +24,8 @@ impl Rssl {
     pub fn new() -> Self {
         let source = model::Source::Filelist(".".to_string());
         let list = source.load("static list");
-        let sel = view::Selection::new();
-        let filter = view::Filter::new();
         Self {
             list,
-            filter,
-            selection: sel,
             selected: Vec::new(),
         }
     }
@@ -45,10 +39,14 @@ impl Rssl {
                 } => return true,
                 // TODO: <Tab> to toggle between source/filter and selection/action pages
                 _ => {
-                    if let model::Comm::Filter = self.filter.handle(key, self.list.filter_mut()) {
+                    if let actions::Message::Filter =
+                        actions::filter::handle(key, self.list.filter_mut())
+                    {
                         self.list.apply_filter();
                     }
-                    if let model::Comm::Item(what) = self.selection.handle(key, &mut self.list) {
+                    if let actions::Message::Item(what) =
+                        actions::catalog::handle(key, &mut self.list)
+                    {
                         self.selected.push(what);
                     }
                     false
@@ -65,9 +63,7 @@ impl Widget for &Rssl {
             .direction(Direction::Vertical)
             .constraints([Constraint::Min(2), Constraint::Length(1)].as_ref())
             .split(area);
-        self.selection
-            .output(&self.list, &parts[0])
-            .render(parts[0], buf);
-        self.filter.output(self.list.filter()).render(parts[1], buf);
+        view::catalog::output(&self.list, &parts[0]).render(parts[0], buf);
+        view::filter::output(self.list.filter()).render(parts[1], buf);
     }
 }
