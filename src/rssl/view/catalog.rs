@@ -1,4 +1,4 @@
-use super::{super::model, COLOR_BG, COLOR_FG};
+use super::{super::model, super::model::List, COLOR_BG, COLOR_FG};
 use tui::{
     layout::Rect,
     style::Style,
@@ -6,12 +6,12 @@ use tui::{
     widgets::{Block, Borders, Paragraph, Wrap},
 };
 
-pub fn output<'a>(model: &'a model::List, size: &Rect) -> Paragraph<'a> {
-    let name = model.name.as_str().to_string();
+pub fn output<'a>(model: &'a model::FilteredList, size: &Rect) -> Paragraph<'a> {
+    let name = model.name().as_str().to_string();
     let block = Block::default()
         .borders(Borders::ALL)
         .style(Style::default().fg(COLOR_FG).bg(COLOR_BG));
-    let mut y = model.pos.get() as u16;
+    let mut y = model.pos().get() as u16;
     if y < size.height - 3 {
         y = 0;
     } else {
@@ -23,11 +23,11 @@ pub fn output<'a>(model: &'a model::List, size: &Rect) -> Paragraph<'a> {
         .wrap(Wrap { trim: false })
 }
 
-fn get_styled_content(model: &model::List) -> Vec<Spans> {
+fn get_styled_content(model: &model::FilteredList) -> Vec<Spans> {
     let mut styled = Vec::new();
     for (idx, line) in model.items().iter().enumerate() {
         let mut style = Style::default();
-        if idx == model.pos.get() {
+        if idx == model.pos().get() {
             style = style.bg(COLOR_FG).fg(COLOR_BG);
         }
         let line = line.as_str().to_string();

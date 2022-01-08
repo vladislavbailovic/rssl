@@ -1,13 +1,13 @@
-use super::{super::model, *};
+use super::{super::model, super::model::List, *};
 use crossterm::event::{KeyCode, KeyEvent, KeyModifiers};
 
-pub fn handle(key: KeyEvent, model: &mut model::List) -> Message {
+pub fn handle(key: KeyEvent, model: &mut model::FilteredList) -> Message {
     match key {
         KeyEvent {
             code: KeyCode::Up,
             modifiers: _,
         } => {
-            model.pos.prev();
+            model.pos_mut().prev();
         }
 
         KeyEvent {
@@ -15,7 +15,7 @@ pub fn handle(key: KeyEvent, model: &mut model::List) -> Message {
             modifiers: _,
         } => {
             for _ in 0..10 {
-                model.pos.prev();
+                model.pos_mut().prev();
             }
         }
 
@@ -23,14 +23,14 @@ pub fn handle(key: KeyEvent, model: &mut model::List) -> Message {
             code: KeyCode::Home,
             modifiers: _,
         } => {
-            model.pos.set(0);
+            model.pos_mut().set(0);
         }
 
         KeyEvent {
             code: KeyCode::Down,
             modifiers: _,
         } => {
-            model.pos.next();
+            model.pos_mut().next();
         }
 
         KeyEvent {
@@ -38,7 +38,7 @@ pub fn handle(key: KeyEvent, model: &mut model::List) -> Message {
             modifiers: _,
         } => {
             for _ in 0..10 {
-                model.pos.next();
+                model.pos_mut().next();
             }
         }
 
@@ -46,7 +46,8 @@ pub fn handle(key: KeyEvent, model: &mut model::List) -> Message {
             code: KeyCode::End,
             modifiers: _,
         } => {
-            model.pos.set(model.pos.max() - 1);
+            let pos = model.pos().max();
+            model.pos_mut().set(pos - 1);
         }
 
         KeyEvent {

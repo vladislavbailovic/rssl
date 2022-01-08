@@ -6,7 +6,7 @@ mod view;
 
 pub struct Rssl {
     active: view::Pane,
-    list: model::List,
+    list: model::FilteredList,
     pub selected: Vec<String>,
 }
 

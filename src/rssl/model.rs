@@ -36,18 +36,29 @@ impl Cursor {
     }
 }
 
-pub struct List {
-    pub name: String,
-    pub pos: Cursor,
+pub trait List {
+
+    fn name(&self) -> &String;
+    fn pos(&self) -> &Cursor;
+    fn pos_mut(&mut self) -> &mut Cursor;
+    fn items(&self) -> &Vec<String>;
+    fn current(&self) -> String {
+        self.items()[self.pos().get()].as_str().to_string()
+    }
+}
+
+pub struct FilteredList {
+    name: String,
+    pos: Cursor,
 
     filter: Filter,
     items: Vec<String>,
     filtered: Vec<String>,
 }
-impl List {
-    pub fn new(name: &str, items: Vec<String>) -> List {
+impl FilteredList {
+    pub fn new(name: &str, items: Vec<String>) -> Self {
         let len = items.len() - 1;
-        List {
+        Self {
             name: name.to_string(),
             items,
             filter: Filter::new(),
@@ -77,13 +88,6 @@ impl List {
         }
     }
 
-    pub fn items(&self) -> &Vec<String> {
-        if !self.filter.pattern().is_empty() {
-            return &self.filtered;
-        }
-        &self.items
-    }
-
     pub fn filter(&self) -> &Filter {
         &self.filter
     }
@@ -91,9 +95,27 @@ impl List {
     pub fn filter_mut(&mut self) -> &mut Filter {
         &mut self.filter
     }
+}
 
-    pub fn current(&self) -> String {
-        self.items()[self.pos.get()].as_str().to_string()
+impl List for FilteredList {
+
+    fn name(&self) -> &String {
+        &self.name
+    }
+
+    fn pos(&self) -> &Cursor {
+        &self.pos
+    }
+
+    fn pos_mut(&mut self) -> &mut Cursor {
+        &mut self.pos
+    }
+
+    fn items(&self) -> &Vec<String> {
+        if !self.filter.pattern().is_empty() {
+            return &self.filtered;
+        }
+        &self.items
     }
 }
 
@@ -138,11 +160,11 @@ pub enum Source {
     Command(String),
 }
 impl Source {
-    pub fn load(&self, title: &str) -> List {
+    pub fn load(&self, title: &str) -> FilteredList {
         match self {
             Source::Static(content) => {
                 let items: Vec<String> = content.split('\n').map(String::from).collect();
-                List::new(title, items)
+                FilteredList::new(title, items)
             }
             Source::Filelist(path) => {
                 let cmd = Source::Command(path.to_string());
