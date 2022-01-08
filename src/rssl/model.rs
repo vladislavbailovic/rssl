@@ -1,3 +1,9 @@
+pub enum Comm {
+    Empty,
+    Filter,
+    Item(String),
+}
+
 pub struct Cursor {
     current: usize,
     max: usize,

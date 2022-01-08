@@ -12,6 +12,7 @@ pub struct Rssl {
     list: model::List,
     selection: view::Selection,
     filter: view::Filter,
+    selected: Vec<String>,
 }
 
 impl Default for Rssl {
@@ -31,6 +32,7 @@ impl Rssl {
             list,
             filter,
             selection: sel,
+            selected: Vec::new(),
         }
     }
 
@@ -44,8 +46,10 @@ impl Rssl {
                 // TODO: <ctrl+space> to (un)select an item
                 // TODO: <Tab> to toggle between source/filter and selection/action pages
                 _ => {
-                    self.filter.handle(key, self.list.filter_mut());
-                    self.list.apply_filter();
+                    match self.filter.handle(key, self.list.filter_mut()) {
+                        model::Comm::Filter => self.list.apply_filter(),
+                        _ => (),
+                    };
                     self.selection.handle(key, &mut self.list);
                     false
                 }

@@ -33,7 +33,7 @@ impl Selection {
             .wrap(Wrap { trim: false })
     }
 
-    pub fn handle(&self, key: KeyEvent, model: &mut model::List) -> bool {
+    pub fn handle(&self, key: KeyEvent, model: &mut model::List) -> model::Comm {
         match key {
             KeyEvent {
                 code: KeyCode::Up,
@@ -77,7 +77,7 @@ impl Selection {
             }
             _ => {}
         };
-        false
+        model::Comm::Empty
     }
 
     fn get_styled_content(&self, model: &model::List) -> Vec<Spans> {
@@ -122,13 +122,14 @@ impl Filter {
             .wrap(Wrap { trim: false })
     }
 
-    pub fn handle(&self, key: KeyEvent, model: &mut model::Filter) -> bool {
+    pub fn handle(&self, key: KeyEvent, model: &mut model::Filter) -> model::Comm {
         match key {
             KeyEvent {
                 code: KeyCode::Char(c),
                 modifiers: _,
             } => {
                 model.push(c);
+                return model::Comm::Filter;
             }
 
             KeyEvent {
@@ -136,6 +137,7 @@ impl Filter {
                 modifiers: _,
             } => {
                 model.backspace();
+                return model::Comm::Filter;
             }
 
             KeyEvent {
@@ -154,6 +156,6 @@ impl Filter {
 
             _ => (),
         };
-        false
+        model::Comm::Empty
     }
 }
