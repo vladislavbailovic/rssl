@@ -1,5 +1,5 @@
 use super::model;
-use crossterm::event::{KeyCode, KeyEvent};
+use crossterm::event::{KeyCode, KeyEvent, KeyModifiers};
 use tui::{
     layout::Rect,
     style::{Color, Style},
@@ -40,7 +40,8 @@ impl Selection {
                 modifiers: _,
             } => {
                 model.pos.prev();
-            }
+            },
+
             KeyEvent {
                 code: KeyCode::PageUp,
                 modifiers: _,
@@ -48,19 +49,22 @@ impl Selection {
                 for _ in 0..10 {
                     model.pos.prev();
                 }
-            }
+            },
+
             KeyEvent {
                 code: KeyCode::Home,
                 modifiers: _,
             } => {
                 model.pos.set(0);
-            }
+            },
+
             KeyEvent {
                 code: KeyCode::Down,
                 modifiers: _,
             } => {
                 model.pos.next();
-            }
+            },
+
             KeyEvent {
                 code: KeyCode::PageDown,
                 modifiers: _,
@@ -126,7 +130,7 @@ impl Filter {
         match key {
             KeyEvent {
                 code: KeyCode::Char(c),
-                modifiers: _,
+                modifiers: KeyModifiers::NONE | KeyModifiers::SHIFT,
             } => {
                 model.push(c);
                 return model::Comm::Filter;
@@ -142,14 +146,14 @@ impl Filter {
 
             KeyEvent {
                 code: KeyCode::Left,
-                modifiers: _,
+                modifiers: KeyModifiers::NONE,
             } => {
                 model.left();
             }
 
             KeyEvent {
                 code: KeyCode::Right,
-                modifiers: _,
+                modifiers: KeyModifiers::NONE,
             } => {
                 model.right();
             }
