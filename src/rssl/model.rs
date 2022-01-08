@@ -144,9 +144,11 @@ impl List {
 
 impl List {
     pub fn push(&mut self, item: String) {
-        self.items.push(item);
-        if !self.items.is_empty() {
-            self.pos.set_max(self.items.len() - 1);
+        if !self.items.contains(&item) {
+            self.items.push(item);
+            if !self.items.is_empty() {
+                self.pos.set_max(self.items.len() - 1);
+            }
         }
     }
 

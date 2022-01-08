@@ -42,7 +42,6 @@ impl Rssl {
                     modifiers: KeyModifiers::CONTROL,
                 } => return true,
 
-                // TODO: swap active pane
                 KeyEvent {
                     code: KeyCode::Tab,
                     modifiers: KeyModifiers::NONE | KeyModifiers::SHIFT,
