@@ -72,12 +72,21 @@ impl Selection {
                 for _ in 0..10 {
                     model.pos.next();
                 }
-            }
+            },
+
             KeyEvent {
                 code: KeyCode::End,
                 modifiers: _,
             } => {
                 model.pos.set(model.pos.max() - 1);
+            },
+
+            KeyEvent {
+                code: KeyCode::Char(' '),
+                modifiers: KeyModifiers::CONTROL,
+            } => {
+                let item = model.current();
+                return model::Comm::Item(item);
             }
             _ => {}
         };

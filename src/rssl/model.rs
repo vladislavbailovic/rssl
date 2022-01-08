@@ -97,6 +97,10 @@ impl List {
     pub fn filter_mut(&mut self) -> &mut Filter {
         &mut self.filter
     }
+
+    pub fn current(&self) -> String {
+        self.items()[self.pos.get()].as_str().to_string()
+    }
 }
 
 pub struct Filter {
