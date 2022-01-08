@@ -15,12 +15,6 @@ fn main() {
     exec(terminal);
 }
 
-fn exit(status: i32) {
-    disable_raw_mode().expect("Could not disable raw mode");
-    execute!(io::stdout(), LeaveAlternateScreen).expect("Unable to leave alternate screen");
-    process::exit(status)
-}
-
 fn draw<B: Backend>(rssl: &rssl::Rssl, frame: &mut Frame<B>) {
     frame.render_widget(rssl, frame.size());
 }
@@ -39,7 +33,11 @@ fn exec<B: Backend>(mut terminal: Terminal<B>) {
     terminal
         .show_cursor()
         .expect("Unable to re-show the cursor");
-    exit(0);
+    disable_raw_mode().expect("Could not disable raw mode");
+    execute!(io::stdout(), LeaveAlternateScreen).expect("Unable to leave alternate screen");
+    // TODO: do something with selected items
+    println!("{:#?}", r.selected);
+    process::exit(0)
 }
 
 fn bootstrap() -> Terminal<impl Backend> {
