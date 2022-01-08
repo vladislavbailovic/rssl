@@ -36,7 +36,7 @@ fn exec<B: Backend>(mut terminal: Terminal<B>) {
     disable_raw_mode().expect("Could not disable raw mode");
     execute!(io::stdout(), LeaveAlternateScreen).expect("Unable to leave alternate screen");
     // TODO: do something with selected items
-    println!("{:#?}", r.selected);
+    println!("{:#?}", r.selected());
     process::exit(0)
 }
 

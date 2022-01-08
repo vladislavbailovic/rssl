@@ -1,7 +1,7 @@
 use super::{super::model, *};
 use crossterm::event::{KeyCode, KeyEvent, KeyModifiers};
 
-pub fn handle(key: KeyEvent, model: &mut dyn model::List) -> Message {
+pub fn handle(key: KeyEvent, model: &mut dyn model::Listlike) -> Message {
     match key {
         KeyEvent {
             code: KeyCode::Up,

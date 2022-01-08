@@ -4,10 +4,12 @@ mod actions;
 mod model;
 mod view;
 
+use model::Listlike;
+
 pub struct Rssl {
     active: view::Pane,
     list: model::FilteredList,
-    pub selected: Vec<String>,
+    selected: model::List,
 }
 
 impl Default for Rssl {
@@ -20,11 +22,16 @@ impl Rssl {
     pub fn new() -> Self {
         let source = model::Source::Filelist(".".to_string());
         let list = source.load("static list");
+        let selected = model::List::new("selection", Vec::new());
         Self {
             active: view::Pane::Catalog,
             list,
-            selected: Vec::new(),
+            selected,
         }
+    }
+
+    pub fn selected(&self) -> &Vec<String> {
+        self.selected.items()
     }
 
     pub fn handle(&mut self) -> bool {

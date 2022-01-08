@@ -36,7 +36,7 @@ impl Cursor {
     }
 }
 
-pub trait List {
+pub trait Listlike {
     fn name(&self) -> &String;
     fn pos(&self) -> &Cursor;
     fn pos_mut(&mut self) -> &mut Cursor;
@@ -96,7 +96,7 @@ impl FilteredList {
     }
 }
 
-impl List for FilteredList {
+impl Listlike for FilteredList {
     fn name(&self) -> &String {
         &self.name
     }
@@ -113,6 +113,52 @@ impl List for FilteredList {
         if !self.filter.pattern().is_empty() {
             return &self.filtered;
         }
+        &self.items
+    }
+}
+
+pub struct List {
+    name: String,
+    pos: Cursor,
+    items: Vec<String>,
+}
+impl List {
+    pub fn new(name: &str, items: Vec<String>) -> Self {
+        let mut len = 0;
+        if !items.is_empty() {
+            len = items.len() - 1;
+        }
+        Self {
+            name: name.to_string(),
+            items,
+            pos: Cursor {
+                current: 0,
+                max: len,
+            },
+        }
+    }
+}
+
+impl List {
+    pub fn push(&mut self, item: String) {
+        self.items.push(item)
+    }
+}
+
+impl Listlike for List {
+    fn name(&self) -> &String {
+        &self.name
+    }
+
+    fn pos(&self) -> &Cursor {
+        &self.pos
+    }
+
+    fn pos_mut(&mut self) -> &mut Cursor {
+        &mut self.pos
+    }
+
+    fn items(&self) -> &Vec<String> {
         &self.items
     }
 }

@@ -29,7 +29,9 @@ impl Widget for &Rssl {
                 catalog::output(&self.list, &parts[0]).render(parts[0], buf);
                 filter::output(self.list.filter()).render(parts[1], buf);
             }
-            Pane::Selection => {}
+            Pane::Selection => {
+                catalog::output(&self.selected, &parts[0]).render(parts[0], buf);
+            }
         };
     }
 }
