@@ -1,4 +1,4 @@
-use super::{super::model, super::model::List, COLOR_BG, COLOR_FG};
+use super::{super::model, COLOR_BG, COLOR_FG};
 use tui::{
     layout::Rect,
     style::Style,
@@ -6,7 +6,7 @@ use tui::{
     widgets::{Block, Borders, Paragraph, Wrap},
 };
 
-pub fn output<'a>(model: &'a model::FilteredList, size: &Rect) -> Paragraph<'a> {
+pub fn output<'a>(model: &'a dyn model::List, size: &Rect) -> Paragraph<'a> {
     let name = model.name().as_str().to_string();
     let block = Block::default()
         .borders(Borders::ALL)
@@ -23,7 +23,7 @@ pub fn output<'a>(model: &'a model::FilteredList, size: &Rect) -> Paragraph<'a> 
         .wrap(Wrap { trim: false })
 }
 
-fn get_styled_content(model: &model::FilteredList) -> Vec<Spans> {
+fn get_styled_content(model: &dyn model::List) -> Vec<Spans> {
     let mut styled = Vec::new();
     for (idx, line) in model.items().iter().enumerate() {
         let mut style = Style::default();

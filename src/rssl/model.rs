@@ -37,7 +37,6 @@ impl Cursor {
 }
 
 pub trait List {
-
     fn name(&self) -> &String;
     fn pos(&self) -> &Cursor;
     fn pos_mut(&mut self) -> &mut Cursor;
@@ -98,7 +97,6 @@ impl FilteredList {
 }
 
 impl List for FilteredList {
-
     fn name(&self) -> &String {
         &self.name
     }
