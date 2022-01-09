@@ -34,10 +34,6 @@ impl Rssl {
         }
     }
 
-    pub fn selected(&self) -> &Vec<String> {
-        self.selected.items()
-    }
-
     pub fn handle(&mut self) -> bool {
         if let Ok(Event::Key(key)) = event::read() {
             match key {
@@ -45,6 +41,15 @@ impl Rssl {
                     code: KeyCode::Char('q'),
                     modifiers: KeyModifiers::CONTROL,
                 } => return true,
+
+                KeyEvent {
+                    code: KeyCode::Enter,
+                    modifiers: _,
+                } => {
+                    let item = self.list.current();
+                    self.selected.push(item);
+                    return true;
+                }
 
                 KeyEvent {
                     code: KeyCode::Tab,
@@ -76,6 +81,12 @@ impl Rssl {
 
         if let actions::Message::Item(what) = actions::catalog::handle(key, &mut self.list) {
             self.selected.push(what);
+        }
+    }
+
+    pub fn execute(&self) {
+        for item in self.selected.items() {
+            println!("{}", item);
         }
     }
 

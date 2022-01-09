@@ -35,8 +35,9 @@ fn exec<B: Backend>(mut terminal: Terminal<B>) {
         .expect("Unable to re-show the cursor");
     disable_raw_mode().expect("Could not disable raw mode");
     execute!(io::stdout(), LeaveAlternateScreen).expect("Unable to leave alternate screen");
-    // TODO: do something with selected items
-    println!("{:#?}", r.selected());
+
+    r.execute();
+
     process::exit(0)
 }
 
