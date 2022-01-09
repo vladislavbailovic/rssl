@@ -1,5 +1,5 @@
 pub mod catalog;
-pub mod filter;
+pub mod prompt;
 
 use tui::style::Color;
 
@@ -27,7 +27,7 @@ impl Widget for &Rssl {
         match self.active {
             Pane::Catalog => {
                 catalog::output(&self.list, &parts[0]).render(parts[0], buf);
-                filter::output(self.list.filter()).render(parts[1], buf);
+                prompt::output(self.list.filter()).render(parts[1], buf);
             }
             Pane::Selection => {
                 catalog::output(&self.selected, &parts[0]).render(parts[0], buf);

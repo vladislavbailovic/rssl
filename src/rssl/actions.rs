@@ -1,5 +1,5 @@
 pub mod catalog;
-pub mod filter;
+pub mod prompt;
 
 pub enum Message {
     Empty,

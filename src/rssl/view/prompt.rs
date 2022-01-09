@@ -1,12 +1,12 @@
-use super::{super::model, COLOR_BG, COLOR_FG};
+use super::{super::prompt, COLOR_BG, COLOR_FG};
 use tui::{
     style::Style,
     text::{Span, Spans},
     widgets::{Block, Paragraph, Wrap},
 };
 
-pub fn output(model: &model::Filter) -> Paragraph {
-    let mut output = model.pattern().to_string();
+pub fn output(model: &dyn prompt::Prompt) -> Paragraph {
+    let mut output = model.source().to_string();
     if model.pos() >= output.len() {
         output += "_";
     }

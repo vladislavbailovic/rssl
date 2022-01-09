@@ -1,8 +1,14 @@
+use super::prompt::{Prompt,Filter};
+
 pub struct Cursor {
     current: usize,
     max: usize,
 }
 impl Cursor {
+    pub fn new() -> Self {
+        Self{ current: 0, max: 0 }
+    }
+
     pub fn get(&self) -> usize {
         self.current
     }
@@ -75,7 +81,7 @@ impl FilteredList {
     pub fn apply_filter(&mut self) {
         self.filtered = Vec::new();
         for item in self.items.iter() {
-            if item.contains(self.filter.pattern()) {
+            if item.contains(self.filter.source()) {
                 self.filtered.push(item.to_string());
             }
         }
@@ -113,7 +119,7 @@ impl Listlike for FilteredList {
     }
 
     fn items(&self) -> &Vec<String> {
-        if !self.filter.pattern().is_empty() {
+        if !self.filter.source().is_empty() {
             return &self.filtered;
         }
         &self.items
@@ -184,41 +190,6 @@ impl Listlike for List {
     }
 }
 
-pub struct Filter {
-    pattern: String,
-    pos: Cursor,
-}
-impl Filter {
-    pub fn new() -> Filter {
-        Filter {
-            pattern: String::new(),
-            pos: Cursor { current: 0, max: 0 },
-        }
-    }
-    pub fn pos(&self) -> usize {
-        self.pos.get()
-    }
-    pub fn pattern(&self) -> &str {
-        &self.pattern
-    }
-    pub fn push(&mut self, c: char) {
-        self.pattern.push(c);
-        self.pos.set_max(self.pattern.len());
-        self.pos.next();
-    }
-    pub fn backspace(&mut self) {
-        if self.pos.get() <= self.pattern.len() && self.pos.prev() {
-            self.pattern.remove(self.pos.get());
-        }
-    }
-    pub fn right(&mut self) {
-        self.pos.next();
-    }
-    pub fn left(&mut self) {
-        self.pos.prev();
-    }
-}
-
 pub enum Source {
     Static(String),
     Filelist(String),
@@ -256,3 +227,4 @@ fn filelist(command: &str) -> String {
     }
     result
 }
+

@@ -1,7 +1,7 @@
-use super::{super::model, *};
+use super::{super::prompt, *};
 use crossterm::event::{KeyCode, KeyEvent, KeyModifiers};
 
-pub fn handle(key: KeyEvent, model: &mut model::Filter) -> Message {
+pub fn handle(key: KeyEvent, model: &mut dyn prompt::Prompt) -> Message {
     match key {
         KeyEvent {
             code: KeyCode::Char(c),

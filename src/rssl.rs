@@ -1,8 +1,10 @@
 use crossterm::event::{self, Event, KeyCode, KeyEvent, KeyModifiers};
 
 mod actions;
-mod model;
 mod view;
+mod prompt;
+
+mod model;
 
 use model::Listlike;
 
@@ -66,7 +68,7 @@ impl Rssl {
     }
 
     fn handle_catalog(&mut self, key: KeyEvent) {
-        if let actions::Message::Filter = actions::filter::handle(key, self.list.filter_mut()) {
+        if let actions::Message::Filter = actions::prompt::handle(key, self.list.filter_mut()) {
             self.list.apply_filter();
         }
 
