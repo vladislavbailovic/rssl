@@ -12,6 +12,7 @@ pub struct Rssl {
     active: view::Pane,
     list: model::FilteredList,
     selected: model::List,
+    command: prompt::Command,
 }
 
 impl Default for Rssl {
@@ -29,6 +30,7 @@ impl Rssl {
             active: view::Pane::Catalog,
             list,
             selected,
+            command: prompt::Command::new(),
         }
     }
 
@@ -78,6 +80,7 @@ impl Rssl {
     }
 
     fn handle_selection(&mut self, key: KeyEvent) {
+        actions::prompt::handle(key, &mut self.command);
         if let actions::Message::Item(what) = actions::catalog::handle(key, &mut self.selected) {
             self.selected.remove(what);
         }

@@ -16,26 +16,16 @@ impl Filter {
 }
 
 impl Prompt for Filter {
-    fn pos(&self) -> usize {
-        self.pos.get()
+    fn cursor_mut(&mut self) -> &mut Cursor {
+        &mut self.pos
     }
-    fn source(&self) -> &str {
+    fn cursor(&self) -> &Cursor {
+        &self.pos
+    }
+    fn source_mut(&mut self) -> &mut String {
+        &mut self.pattern
+    }
+    fn source(&self) -> &String {
         &self.pattern
-    }
-    fn push(&mut self, c: char) {
-        self.pattern.push(c);
-        self.pos.set_max(self.pattern.len());
-        self.pos.next();
-    }
-    fn backspace(&mut self) {
-        if self.pos.get() <= self.pattern.len() && self.pos.prev() {
-            self.pattern.remove(self.pos.get());
-        }
-    }
-    fn right(&mut self) {
-        self.pos.next();
-    }
-    fn left(&mut self) {
-        self.pos.prev();
     }
 }

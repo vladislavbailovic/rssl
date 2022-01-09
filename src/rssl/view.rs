@@ -31,6 +31,7 @@ impl Widget for &Rssl {
             }
             Pane::Selection => {
                 catalog::output(&self.selected, &parts[0]).render(parts[0], buf);
+                prompt::output(&self.command).render(parts[1], buf);
             }
         };
     }
