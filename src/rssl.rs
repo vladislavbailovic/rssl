@@ -1,12 +1,12 @@
 use crossterm::event::{self, Event, KeyCode, KeyEvent, KeyModifiers};
 
 mod actions;
-mod view;
 mod prompt;
+mod view;
 
 mod model;
 
-use model::Listlike;
+use model::Catalog;
 
 pub struct Rssl {
     active: view::Pane,

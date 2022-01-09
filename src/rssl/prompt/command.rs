@@ -1,5 +1,5 @@
-use super::Prompt;
 use super::super::model::Cursor;
+use super::Prompt;
 
 pub struct Command {
     command: String,
@@ -29,4 +29,3 @@ impl Prompt for Command {
         &self.command
     }
 }
-

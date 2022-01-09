@@ -1,4 +1,4 @@
-use super::prompt::{Prompt,Filter};
+use super::prompt::{Filter, Prompt};
 
 pub struct Cursor {
     current: usize,
@@ -6,7 +6,7 @@ pub struct Cursor {
 }
 impl Cursor {
     pub fn new() -> Self {
-        Self{ current: 0, max: 0 }
+        Self { current: 0, max: 0 }
     }
 
     pub fn get(&self) -> usize {
@@ -42,7 +42,7 @@ impl Cursor {
     }
 }
 
-pub trait Listlike {
+pub trait Catalog {
     fn name(&self) -> &String;
     fn pos(&self) -> &Cursor;
     fn pos_mut(&mut self) -> &mut Cursor;
@@ -105,7 +105,7 @@ impl FilteredList {
     }
 }
 
-impl Listlike for FilteredList {
+impl Catalog for FilteredList {
     fn name(&self) -> &String {
         &self.name
     }
@@ -172,7 +172,7 @@ impl List {
     }
 }
 
-impl Listlike for List {
+impl Catalog for List {
     fn name(&self) -> &String {
         &self.name
     }
@@ -227,4 +227,3 @@ fn filelist(command: &str) -> String {
     }
     result
 }
-
