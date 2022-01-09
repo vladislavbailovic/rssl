@@ -2,7 +2,7 @@ use crossterm::{
     execute,
     terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
 };
-use std::{io, process};
+use std::{env, io, process};
 use tui::{
     backend::{Backend, CrosstermBackend},
     Frame, Terminal,
@@ -20,7 +20,7 @@ fn draw<B: Backend>(rssl: &rssl::Rssl, frame: &mut Frame<B>) {
 }
 
 fn exec<B: Backend>(mut terminal: Terminal<B>) {
-    let mut r = rssl::Rssl::new();
+    let mut r = rssl::Rssl::new(env::args().collect());
     loop {
         terminal
             .draw(|frame| draw(&r, frame))

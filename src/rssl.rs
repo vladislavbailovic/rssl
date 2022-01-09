@@ -1,6 +1,7 @@
 use crossterm::event::{self, Event, KeyCode, KeyEvent, KeyModifiers};
 
 mod actions;
+mod cli;
 mod prompt;
 mod view;
 
@@ -15,20 +16,13 @@ pub struct Rssl {
     command: prompt::Command,
 }
 
-impl Default for Rssl {
-    fn default() -> Self {
-        Self::new()
-    }
-}
-
 impl Rssl {
-    pub fn new() -> Self {
-        let source = model::Source::Filelist(".".to_string());
-        let list = source.load("static list");
+    pub fn new(args: Vec<String>) -> Self {
+        let cli = cli::parse(args);
         let selected = model::List::new("selection", Vec::new());
         Self {
             active: view::Pane::Catalog,
-            list,
+            list: cli.source().load("TODO: come up with source naming"),
             selected,
             command: prompt::Command::new(),
         }
