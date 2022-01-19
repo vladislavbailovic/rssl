@@ -13,12 +13,16 @@ impl Source {
                 FilteredList::new(title, items)
             }
             Source::Filelist(path) => {
-                let filelist = filelist(path);
+                let filelist = filelist(path).unwrap_or_else(|e| {
+                    panic!("Error listing directory: [{}] because: {}", path, e);
+                });
                 let src = Source::Static(filelist);
                 src.load(title)
             }
             Source::Command(cmd) => {
-                let res = command(cmd);
+                let res = command(cmd).unwrap_or_else(|e| {
+                    panic!("Unable to run command: [{}] because: {}", cmd, e);
+                });
                 let src = Source::Static(res);
                 src.load(title)
             }
@@ -26,23 +30,22 @@ impl Source {
     }
 }
 
-fn filelist(path: &str) -> String {
+fn filelist(path: &str) -> Result<String, std::io::Error> {
     let mut result = Vec::new();
-    for entry in std::fs::read_dir(path).expect("Unable to list directory") {
-        result.push(entry.expect("Invalid entry").path().into_os_string().into_string().unwrap());
+    for entry in std::fs::read_dir(path)? {
+        let entry = entry?;
+        let item = String::from(entry.path().to_string_lossy());
+        result.push(item);
     }
-    result.join("\n")
+    Ok(result.join("\n"))
 }
 
-fn command(command: &str) -> String {
+fn command(command: &str) -> Result<String, std::io::Error> {
     use std::process::Command;
-    let command = Command::new("find")
-        .arg(command)
-        .output()
-        .expect("Command execution failed");
-    let result = String::from_utf8(command.stdout).expect("Invalid stdout");
+    let command = Command::new("find").arg(command).output()?;
+    let result = String::from_utf8(command.stdout).expect("Unable to parse stdout");
     if result.is_empty() {
-        return String::from_utf8(command.stderr).expect("Invalid stderr");
+        return Ok(String::from_utf8(command.stderr).expect("Unable to parse stderr"));
     }
-    result
+    Ok(result)
 }
