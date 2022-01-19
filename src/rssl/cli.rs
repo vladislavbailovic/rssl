@@ -14,7 +14,7 @@ pub fn parse(params: Vec<String>) -> Cli {
         Source::Filelist(".".to_string())
     } else {
         match args[0].as_str() {
-            "-c" if args.len() > 1 => Source::Command(args[0].as_str().to_string()),
+            "-c" if args.len() > 1 => Source::Command(args[1].as_str().to_string()),
             "-c" => panic!("Missing command"),
             _ => Source::Filelist(args[0].as_str().to_string()),
         }

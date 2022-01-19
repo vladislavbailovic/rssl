@@ -42,7 +42,14 @@ fn filelist(path: &str) -> Result<String, std::io::Error> {
 
 fn command(command: &str) -> Result<String, std::io::Error> {
     use std::process::Command;
-    let command = Command::new("find").arg(command).output()?;
+    let parts: Vec<&str> = command.split(' ').collect();
+    let mut command = Command::new(parts[0]);
+    if parts.len() > 1 {
+        for arg in parts[1..].iter() {
+            command.arg(arg);
+        }
+    }
+    let command = command.output()?;
     let result = String::from_utf8(command.stdout).expect("Unable to parse stdout");
     if result.is_empty() {
         return Ok(String::from_utf8(command.stderr).expect("Unable to parse stderr"));
