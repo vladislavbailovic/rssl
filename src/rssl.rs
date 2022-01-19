@@ -1,7 +1,7 @@
 mod actions;
-mod source;
 mod cli;
 mod prompt;
+mod source;
 mod view;
 
 mod model;
