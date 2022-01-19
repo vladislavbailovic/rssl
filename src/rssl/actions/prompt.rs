@@ -3,6 +3,14 @@ use crossterm::event::{KeyCode, KeyEvent, KeyModifiers};
 
 pub fn handle(key: KeyEvent, model: &mut dyn prompt::Prompt) -> Message {
     match key {
+
+        KeyEvent {
+            code: KeyCode::Char(' '),
+            modifiers: _,
+        } => {
+            return Message::Empty;
+        }
+
         KeyEvent {
             code: KeyCode::Char(c),
             modifiers: KeyModifiers::NONE | KeyModifiers::SHIFT,

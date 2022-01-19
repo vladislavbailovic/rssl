@@ -52,7 +52,7 @@ pub fn handle(key: KeyEvent, model: &mut dyn model::Catalog) -> Message {
 
         KeyEvent {
             code: KeyCode::Char(' '),
-            modifiers: KeyModifiers::CONTROL,
+            modifiers: _,
         } => {
             let item = model.current();
             return Message::Item(item);
