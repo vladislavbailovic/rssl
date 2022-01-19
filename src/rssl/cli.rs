@@ -1,7 +1,7 @@
-use super::model;
+use super::source::Source;
 
 pub struct Cli {
-    source: model::Source,
+    source: Source,
 }
 
 pub fn parse(params: Vec<String>) -> Cli {
@@ -17,12 +17,12 @@ pub fn parse(params: Vec<String>) -> Cli {
         path = arg.as_str().to_string();
     }
     Cli {
-        source: model::Source::Filelist(path),
+        source: Source::Filelist(path),
     }
 }
 
 impl Cli {
-    pub fn source(&self) -> &model::Source {
+    pub fn source(&self) -> &Source {
         &self.source
     }
 }
