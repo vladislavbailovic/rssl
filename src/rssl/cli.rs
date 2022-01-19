@@ -10,15 +10,16 @@ pub fn parse(params: Vec<String>) -> Cli {
         .split_first()
         .unwrap_or((&"rssl".to_string(), fallback));
 
-    let mut path = String::from(".");
-    for arg in args {
-        // TODO: parse args
-        // ... else:
-        path = arg.as_str().to_string();
-    }
-    Cli {
-        source: Source::Filelist(path),
-    }
+    let source = if args.is_empty() {
+        Source::Filelist(".".to_string())
+    } else {
+        match args[0].as_str() {
+            "-c" if args.len() > 1 => Source::Command(args[0].as_str().to_string()),
+            "-c" => panic!("Missing command"),
+            _ => Source::Filelist(args[0].as_str().to_string()),
+        }
+    };
+    Cli { source }
 }
 
 impl Cli {
