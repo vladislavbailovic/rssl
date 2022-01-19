@@ -1,5 +1,5 @@
 use super::{super::model, *};
-use crossterm::event::{KeyCode, KeyEvent, KeyModifiers};
+use crossterm::event::{KeyCode, KeyEvent};
 
 pub fn handle(key: KeyEvent, model: &mut dyn model::Catalog) -> Message {
     match key {
